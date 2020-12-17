@@ -3,14 +3,9 @@ package proxy;
 import java.util.UUID;
 
 public class move extends base {
-    transient UUID id;
-    transient short x, y;
+    public UUID id;
 
-    public move(byte type, short x, short y) {
-        super(type);
-        this.x = x;
-        this.y = y;
-    }
+    short x, y;
 
     public int X() {
         return x;
@@ -18,5 +13,11 @@ public class move extends base {
     public int Y() {
         return y;
     }
-    public UUID getId() {return id;}
+
+    public move(UUID id, short x, short y){
+        super(base.MOVE);
+        this.id = id;
+        this.x = x;
+        this.y = y;
+    }
 }

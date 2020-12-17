@@ -13,7 +13,10 @@ public class Client {
 
     public static landshaft land = new landshaft();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         outRun c1 = new outRun(ipAddr, port, ids[0]);
+        Thread.sleep(1000);
+        System.out.println("1 * 10");
+        c1.move((short) 1,(short) 10);
     }
 }

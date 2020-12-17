@@ -28,4 +28,6 @@ public class tank {
         ammo = t.getAmmo();
         sizePlace = new Rectangle(t.sizePlace());
     }
+
+    public void move(Point p){ sizePlace.setLocation(p);}
 }

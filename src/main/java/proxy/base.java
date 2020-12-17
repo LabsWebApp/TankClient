@@ -3,7 +3,7 @@ package proxy;
 import java.io.Serializable;
 
 public class base implements Serializable{
-    public final byte move = 1, shut = 2;
+    public static final byte TANK = 0, MOVE = 1, SHUT = 2;
     public byte type;
     public base(byte type){this.type = type;}
 }

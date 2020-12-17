@@ -6,7 +6,7 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class proxyTank implements Serializable {
+public class proxyTank extends base {
     private UUID id;
     private byte health;
     private transient byte ammo;
@@ -25,6 +25,7 @@ public class proxyTank implements Serializable {
     }
 
     public proxyTank(UUID id, tank t, boolean owner){
+        super(base.TANK);
         this.id = id;
         Rectangle sp = t.getSizePlace();
         x = (short) sp.x;
@@ -36,6 +37,7 @@ public class proxyTank implements Serializable {
     }
 
     public proxyTank(proxyTank t){
+        super(base.TANK);
         id = t.id;
         x = t.x;
         y = t.y;

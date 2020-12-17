@@ -1,6 +1,8 @@
 package client;
 
+import proxy.base;
 import proxy.clientIn;
+import proxy.move;
 import proxy.proxyTank;
 
 import java.awt.*;
@@ -15,6 +17,7 @@ public class outRun {
 
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    private UUID id;
 
     private Serializable tmp = null;
 
@@ -24,6 +27,7 @@ public class outRun {
     public outRun(String addr, int port, UUID id) {
         this.addr = addr;
         this.port = port;
+        this.id = id;
 
         try {
             this.server = new Socket(addr, port);
@@ -56,9 +60,15 @@ public class outRun {
     }
 
 
-    public void send(Serializable obj){
+     void send(Serializable obj){
         tmp = obj;
         new WriteObj().run();
+    }
+
+    public void move (short x, short y){
+        move m = new move(null, x, y);
+        System.out.println(m.Y());
+        send(m);
     }
 
     class WriteObj extends Thread {
@@ -66,6 +76,7 @@ public class outRun {
         public void run() {
                 try {
                     out.writeObject(tmp);
+                    //System.out.println(tmp.getClass().getName());
                     out.flush();
                 } catch (IOException e) {
                     downService();
@@ -76,23 +87,39 @@ public class outRun {
             }
         }
 
-    public void move (Point p){
-
-    }
-
     private class ReadObj extends Thread {
         @Override
         public void run() {
             try {
                 while (true) {
                     Object obj = in.readObject();
-                    switch (obj.getClass().getSimpleName()){
+                  /*  switch (obj.getClass().getSimpleName()){
                         case "proxyTank":
                             Client.land.addTank((proxyTank)obj);
                             break;
+                    }*/
+                    base msg = (base) obj;
+                    switch (msg.type){
+                        case base.TANK:
+                            synchronized (Client.land){
+                                Client.land.addTank((proxyTank)obj);
+
+                            }
+
+                            break;
+                        case base.MOVE:
+                            move t = (move)msg;
+                            System.out.println(t.Y());
+                            System.out.println(t.id);
+                            synchronized (Client.land){
+                                Client.land.move(t.id, t.X(), t.Y());
+                            }
+                            break;
+                        default:
+                            throw new ClassNotFoundException("Класс для посыла не найден");
                     }
 
-                    System.out.println("прочли " + obj.getClass().getSimpleName());
+
                 }
             } catch (IOException | ClassNotFoundException e) {
                 downService();

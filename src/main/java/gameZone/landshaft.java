@@ -28,4 +28,12 @@ public class landshaft {
     }
 
     public void addTank(proxyTank t){ tanks.putIfAbsent(t.getId(), new tank(t));}
+
+    public void move(UUID id, int x, int y){
+        Rectangle proxy = tanks.get(id).getSizePlace();
+        int _x = proxy.x, _y = proxy.y;
+        if(x>=0) _x = x;
+        if(y>=0) _y = y;
+        tanks.get(id).move(new Point(_x, _y));
+    }
 }
